@@ -1,0 +1,109 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="background-color: rgb(79, 97, 116);height:100px ;">
+  <a style="color: rgb(12, 160, 91);margin-left:20px ;" class="navbar-brand">Chuck Norris Jokes</a>
+  <div style="height: 60px;">
+
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <form #searchf="ngForm" (ngSubmit)="searchf.form.valid&&onSubmit()" novalidate>
+
+        <li class="nav-item">
+          <input style="width:30%;margin-left:500px ;height: 60px;" [ngModelOptions]="{standalone: true}" required
+            minlength="3" [(ngModel)]="searchquery" #search="ngModel" class="form-control mr-sm-2" type="search"
+            placeholder="Search">
+        </li>
+        <li style="margin-left:800px;margin-top:-55px;" class="nav-item">
+          <button style="height:50px;width:100px;" class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
+        </li>
+        <li class="nav-item"><span style="margin-left:550px;" class="text-danger"
+            *ngIf="((search.touched || searchf.submitted) && search.errors?.required)||((search.touched || searchf.submitted) && search.errors?.minlength)">
+            Minimum 3 Characters required
+          </span>
+        </li>
+      </form>
+    </ul>
+  </div>
+</nav>
+
+<ng-container *ngIf=!searchEnabled>
+      <div class="col-md-12" style="background-color: rgb(194, 230, 241);padding:10px;" *ngIf="loading"> 
+        <b>Loading</b>
+      </div>
+  <div *ngIf="!loading" class="input-group" style="background-color: rgb(194, 230, 241);padding:10px;">
+    <div class="col-md-12">
+      <b>Pick a Category for Specific Jokes:</b>
+    </div>
+
+    <div class="button-grid" *ngFor="let data of jokecategory;">
+      <div class="box">
+        <input type="button" style="size: 50px;" class="btn btn-light" [ngClass]="{'randombtn':data === 'random' }"
+          (click)="GetRandomJoke(data)" value="{{data}}">
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12">
+
+    <div style="padding-top: 50px;">
+      <img mat-card-image class="img" [src]="jokesModel.icon_url">
+      <div class="details">
+        <mat-card-title style="color: rgb(74, 194, 38);">JokeId: {{jokesModel.id }}</mat-card-title>
+        <p>Created At: {{jokesModel.created_at}} <br /> Updated At: {{jokesModel.updated_at}}</p>
+
+      </div>
+      <div class="para">
+        <mat-card-content *ngIf="loading" style="font-weight: bold;font-size:20px;font-family:sans-serif;">Loading
+        </mat-card-content>
+        <mat-card-content *ngIf="!loading" style="font-weight: bold;font-size:20px;font-family:sans-serif;">{{
+          jokesModel.value }}</mat-card-content>
+      </div>
+      <div class="footer">
+        <mat-card-footer><a style="font-size: 20px;" class="footer" target="_blank" href="{{jokesModel.url}}">Click here
+            for chuckNorris.io</a></mat-card-footer>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="searchEnabled;">
+  <div *ngIf="jokesList.length==0" ></div> <b>no Jokes Related to the Search</b> <div *ngIf="jokesList.length!=0">   <div class="col-md-12" *ngFor="let joke of jokesList |
+    paginate:{ id: 'pagination',
+   itemsPerPage: pageSize,
+   currentPage: pageNumber,
+   totalItems: totalRecords
+  }">
+
+  <div style="padding-top: 50px;">
+    <img mat-card-image class="img" [src]="joke.icon_url">
+    <div class="details">
+      <mat-card-title style="color: rgb(74, 194, 38);">JokeId: {{joke.id }}</mat-card-title>
+      <p>Created At: {{joke.created_at}} <br /> Updated At: {{joke.updated_at}}</p>
+
+    </div>
+    <div class="para">
+      <mat-card-content *ngIf="loading" style="font-weight: bold;font-size:20px;font-family:sans-serif;">Loading
+      </mat-card-content>
+      <mat-card-content *ngIf="!loading" style="font-weight: bold;font-size:20px;font-family:sans-serif;"><p>{{
+        joke.value }}</p></mat-card-content>
+    </div>
+    <div class="footer">
+      <mat-card-footer><a style="font-size: 20px;" class="footer" target="_blank" href="{{joke.url}}">Click here
+          for chuckNorris.io</a></mat-card-footer>
+    </div>
+  </div>
+</div>
+<div style="margin-left: 586px;padding-top:30px ;">
+  <pagination-controls  id="pagination"
+                      (pageChange)="pageNumber=$event"
+                      [maxSize]="9"
+                      [directionLinks]="true"
+                      [autoHide]="true"
+                      [responsive]="true" 
+                      previousLabel="Previous"
+                      nextLabel="Next"
+                      screenReaderPaginationLabel="Pagination"
+                      screenReaderPageLabel="page"
+                      screenReaderCurrentLabel="You're on page"
+                      class="paginator"
+                      >
+</pagination-controls>
+</div></div>
+
+</ng-container>
+   
