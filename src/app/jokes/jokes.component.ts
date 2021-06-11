@@ -30,7 +30,7 @@ this.GetRandomJoke("");
   onSubmit(){
     console.log(this.searchquery,"x");
     console.log("s",this.searchquery.length)
-   if(this.searchquery!=""||(this.searchquery.length)<=3){
+   if(this.searchquery.length>=3||(this.searchquery!=""&&this.searchquery.length>=3)){
       this.GetSearch(this.searchquery);
    }
   }
