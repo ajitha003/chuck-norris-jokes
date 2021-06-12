@@ -3,7 +3,7 @@
   <div style="height: 60px;">
 
     <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-      <form #searchf="ngForm" (ngSubmit)="searchf.form.valid&&onSubmit()" novalidate>
+      <form #searchf="ngForm" (ngSubmit)="onSubmit()" novalidate>
 
         <li class="nav-item">
           <input style="width:40%;margin-left:250px ;height: 53px;" [ngModelOptions]="{standalone: true}" required
@@ -13,9 +13,8 @@
         <li style="margin-left:500px;margin-top:-47px;" class="nav-item">
           <button style="height:44px;width:100px;" class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
         </li>
-        <li class="nav-item"><span style="margin-left:280px;" class="text-danger"
-            *ngIf="((search.touched || searchf.submitted) && search.errors?.required)||((search.touched || searchf.submitted) && search.errors?.minlength)">
-            Minimum 3 Characters required
+        <li class="nav-item"><span id="error" style="margin-left:280px;" class="text-danger">
+           
           </span>
         </li>
       </form>

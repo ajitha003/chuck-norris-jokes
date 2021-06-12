@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import{Jokes}from '../Models/jokes';
 import{JokesServiceService}from './jokes-service.service'
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-jokes',
@@ -28,10 +29,19 @@ this.GetRandomJoke("");
   }
 
   onSubmit(){
-    console.log(this.searchquery,"x");
+  
     console.log("s",this.searchquery.length)
    if(this.searchquery.length>=3||(this.searchquery!=""&&this.searchquery.length>=3)){
       this.GetSearch(this.searchquery);
+   }
+   else{
+    const error: HTMLElement = document.getElementById('error') as HTMLElement
+    error.innerHTML = 'Minimum 3 Character required';
+    setTimeout(() => {
+      error.innerHTML = '';
+     
+     }, 5000); 
+   
    }
   }
   GetJokesCategory(){
@@ -61,6 +71,27 @@ GetSearch(search:string)
   this.jokesService.GetSearch(search).subscribe((data: any)=>{
     this.jokesList=data.result as Jokes[];
     this.loading=false;
+    if(data.result.length==0){
+      Swal.fire({
+        title: 'No Results',
+        text: "'Nothing Related to Your Search'",
+        icon: 'error',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'Ok!',
+        allowOutsideClick:false,
+        allowEnterKey:false
+      }).then((result: { isConfirmed: any; }) => {
+        
+        if (result.isConfirmed) {
+          location.reload();
+        }
+       
+      })      
+      setTimeout(() => {
+        location.reload();
+       }, 5000);     
+    
+  }
    this.totalRecords=data.result.length;
 });
 
